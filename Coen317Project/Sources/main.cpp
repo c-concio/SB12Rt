@@ -1,6 +1,6 @@
 #include <hidef.h>      /* common defines and macros: file found in CodeWarrior folder */
 #include "derivative.h"      /* derivative-specific definitions (e.g.: PORTA, DDDRK) */
-
+#include <string>
 
 
 #define column0 0x01
@@ -112,17 +112,96 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 
 void playSound(char note, int octave){
   switch(note){
+    case 'ab':
     case 'a':
+    case 'bb':
     case 'b':
     case 'c':
+    case 'db':
     case 'd':
+    case 'eb':
     case 'e':
     case 'f':
+    case 'gb':
     case 'g':
     
   }
 }
 
-void displayNote(){
+void displayNote(string note){
   
+  
+  switch (string note) // <--- can i do this??
+	 
+		case 'ab':
+		 //key="1";
+		 PORTP=0x04;
+		 PORTB=0x77;   //root note
+		 PORTP=0x08;
+		 PORTB=0x7c;         //b
+		 
+		case 'bb':
+		 //key="2";
+		 PORTP=0x04;
+		 PORTB=0x7C;
+		  PORTP=0x08;
+		 PORTB=0x7c;
+		 
+		case 'db':
+		 //key="A";
+		 PORTP=0x04;
+		 PORTB=0x5e;
+		  PORTP=0x08;
+		 PORTB=0x7c;
+		 
+	  case 'a':
+		 //key="4";
+		 PORTP=0x04;
+		 PORTB=0x77;
+		 
+		 
+		case 'b':
+		 //key="5";
+		 PORTP=0x04;
+		 PORTB=0x7c;
+		 
+		 
+		case 'c':
+		 //key="6";
+		 PORTP=0x04;
+		 PORTB=0x58;
+		 
+		case 'd':
+		// key="B";
+		PORTP=0x04;
+		 PORTB=0x5e;
+		 
+		case 'eb':
+		// key="7";
+		PORTP=0x04;
+		 PORTB=0x79;
+		  PORTP=0x08;
+		 PORTB=0x7c;
+		 
+		case 'gb':
+		// key="9";
+		PORTP=0x04;
+		PORTB= 0x6f;
+		  PORTP=0x08;
+		 PORTB=0x7c;
+		 
+		case 'e':
+		// key="*";
+		PORTP=0x04;
+		PORTB=0x79;
+		 
+		case 'f':
+		 //key="0";
+		 PORTP=0x04;
+		 PORTB=0x71;
+		 
+		case 'g':
+		 //key="#";
+		 PORTP=0x04;
+		 PORTB=0x6f;
 }
