@@ -1,6 +1,6 @@
 #include <hidef.h>      /* common defines and macros: file found in CodeWarrior folder */
 #include "derivative.h"      /* derivative-specific definitions (e.g.: PORTA, DDDRK) */
-#include <string>
+//#include <string>
 
 
 #define column0 0x01
@@ -33,8 +33,8 @@
 
 */
 
-void playSound(char,int);
-void displayNote();
+void playSound(char,int,int);
+void displayNote(char,int);
 int getOctave();
                                            
 
@@ -64,27 +64,73 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       // look at column 1 and see if any of the bits are pressed
       
       // column0
-      
-      byte test = PORTA_BIT0;
-      
-      
+     
       PORTA_BIT0 = 1;
       
-      test = PORTA_BIT0;
       if(PORTA != column0){
-        while(PORTA_BIT4){
-          playSound('a', 1);
-          displayNote();
+        while(PORTA_BIT4){//a flat
+          playSound('a', 1, 1);
+          //displayNote();
         }
-        while(PORTA_BIT5){
-          playSound('b', 1);
+        while(PORTA_BIT5){//a
+          playSound('a', 0, 1);
+          //displayNote();
+        }
+        while(PORTA_BIT6){//e flat
+          playSound('e', 1, 1);
+          //displayNote();
+        }
+        while(PORTA_BIT7){//e
+          playSound('e', 0, 1);
+          //displayNote();
+        }
+      } else if(PORTA != column1){
+        while(PORTA_BIT4){//b flat
+          playSound('b', 1, 1);
+          //displayNote();
+        }
+        while(PORTA_BIT5){//b
+          playSound('b', 0, 1);
+          //displayNote();
         }
         while(PORTA_BIT6){
-          playSound('c', 1);
+          //Nothing
+        }
+        while(PORTA_BIT7){//f
+          playSound('f', 0, 1);
+          //displayNote();
+        }
+      } else if(PORTA != column2){
+       while(PORTA_BIT4){
+          //Nothing
+        }
+        while(PORTA_BIT5){//c
+          playSound('c', 0, 1);
+          //displayNote();
+        }
+        while(PORTA_BIT6){//g flat
+          playSound('g', 1, 1);
+          //displayNote();
+        }
+        while(PORTA_BIT7){//g
+          playSound('g', 0, 1);
+          //displayNote();
+        } 
+      } else if(PORTA != column3){
+       while(PORTA_BIT4){//a flat
+          playSound('d', 1, 1);
+          //displayNote();
+        }
+        while(PORTA_BIT5){//a
+          playSound('d', 0, 1);
+          //displayNote();
+        }
+        while(PORTA_BIT6){
+          //Nothing
         }
         while(PORTA_BIT7){
-          playSound('d', 1);
-        }
+          //Nothing
+        } 
       }
       PORTA_BIT0 = 0;
     
@@ -111,28 +157,54 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     
 }
 
-void playSound(char note, int octave){
+void playSound(char note, int flat, int octave){
   switch(note){
-    case 'ab':
     case 'a':
-    case 'bb':
+      if(flat == 1){
+          
+      } else{
+        
+      }
+      break;
     case 'b':
+      if(flat == 1){
+          
+      } else{
+        
+      }
+      break;
     case 'c':
-    case 'db':
     case 'd':
-    case 'eb':
+      if(flat == 1){
+          
+      } else{
+        
+      }
+      break;
     case 'e':
+      if(flat == 1){
+          
+      } else{
+        
+      }
+      break;
     case 'f':
-    case 'gb':
+      break;
     case 'g':
+      if(flat == 1){
+          
+      } else{
+        
+      }
+      break;
     
   }
 }
 
-void displayNote(string note){
+void displayNote(char note, int flat){
   
   
-  switch (string note) // <--- can i do this??
+  switch (note) // <--- can i do this??
 	 
 		case 'ab':
 		 //key="1";
