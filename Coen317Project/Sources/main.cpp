@@ -35,6 +35,7 @@
 
 void playSound(char,int);
 void displayNote();
+int getOctave();
                                            
 
 void main(void) { // in Assembly code, this is treated as a SubRoutine
@@ -204,4 +205,24 @@ void displayNote(string note){
 		 //key="#";
 		 PORTP=0x04;
 		 PORTB=0x6f;
+}
+
+int getOctave(){
+  // read the DIP switches
+  if (PTH_PTH0)
+    return 0; 
+  else if (PTH_PTH1)
+    return 1;
+  else if (PTH_PTH2)
+    return 2;
+  else if (PTH_PTH3)
+    return 3;
+  else if (PTH_PTH4)
+    return 4;
+  else if (PTH_PTH5)
+    return 5;
+  else if (PTH_PTH6)
+    return 6;
+  else if (PTH_PTH7)
+    return 7;
 }
