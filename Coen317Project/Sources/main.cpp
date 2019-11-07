@@ -4,9 +4,9 @@
 
 
 #define column0 0x01
-#define column2 0x02
-#define column3 0x04
-#define column4 0x08 
+#define column1 0x02
+#define column2 0x04
+#define column3 0x08 
 
 
 /*
@@ -46,9 +46,11 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 
 
   // Data Direction Register Setup
-  DDRA = 0xF0;  // Keypad
+  DDRA = 0x0F;  // Keypad
   DDRB = 0xFF;  // Cathodes of 7Seg
   DDRP = 0xFF;  // 7Seg
+  
+  PORTA = 0x00;
   
   while(1){
     
@@ -84,7 +86,12 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
           playSound('e', 0, 1);
           //displayNote();
         }
-      } else if(PORTA != column1){
+      }
+      
+      PORTA_BIT0 = 0; 
+      PORTA_BIT1 = 1; 
+      
+      if(PORTA != column1){
         while(PORTA_BIT4){//b flat
           playSound('b', 1, 1);
           //displayNote();
@@ -100,7 +107,12 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
           playSound('f', 0, 1);
           //displayNote();
         }
-      } else if(PORTA != column2){
+      } 
+      
+      PORTA_BIT1 = 0;
+      PORTA_BIT2 = 1;
+      
+      if(PORTA != column2){
        while(PORTA_BIT4){
           //Nothing
         }
@@ -116,7 +128,12 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
           playSound('g', 0, 1);
           //displayNote();
         } 
-      } else if(PORTA != column3){
+      } 
+      
+      PORTA_BIT2 = 0;
+      PORTA_BIT3 = 1;      
+      
+      if(PORTA != column3){
        while(PORTA_BIT4){//a flat
           playSound('d', 1, 1);
           //displayNote();
@@ -132,7 +149,8 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
           //Nothing
         } 
       }
-      PORTA_BIT0 = 0;
+      PORTA_BIT3 = 0;
+      
     
     }
   } 
@@ -201,100 +219,4 @@ void playSound(char note, int flat, int octave){
   }
 }
 
-void displayNote(char note, int flat){
-  
-  
-  switch (note) // <--- can i do this??
-	 
-		case 'ab':
-		 //key="1";
-		 PORTP=0x04;
-		 PORTB=0x77;   //root note
-		 PORTP=0x08;
-		 PORTB=0x7c;         //b
-		 
-		case 'bb':
-		 //key="2";
-		 PORTP=0x04;
-		 PORTB=0x7C;
-		  PORTP=0x08;
-		 PORTB=0x7c;
-		 
-		case 'db':
-		 //key="A";
-		 PORTP=0x04;
-		 PORTB=0x5e;
-		  PORTP=0x08;
-		 PORTB=0x7c;
-		 
-	  case 'a':
-		 //key="4";
-		 PORTP=0x04;
-		 PORTB=0x77;
-		 
-		 
-		case 'b':
-		 //key="5";
-		 PORTP=0x04;
-		 PORTB=0x7c;
-		 
-		 
-		case 'c':
-		 //key="6";
-		 PORTP=0x04;
-		 PORTB=0x58;
-		 
-		case 'd':
-		// key="B";
-		PORTP=0x04;
-		 PORTB=0x5e;
-		 
-		case 'eb':
-		// key="7";
-		PORTP=0x04;
-		 PORTB=0x79;
-		  PORTP=0x08;
-		 PORTB=0x7c;
-		 
-		case 'gb':
-		// key="9";
-		PORTP=0x04;
-		PORTB= 0x6f;
-		  PORTP=0x08;
-		 PORTB=0x7c;
-		 
-		case 'e':
-		// key="*";
-		PORTP=0x04;
-		PORTB=0x79;
-		 
-		case 'f':
-		 //key="0";
-		 PORTP=0x04;
-		 PORTB=0x71;
-		 
-		case 'g':
-		 //key="#";
-		 PORTP=0x04;
-		 PORTB=0x6f;
-}
 
-int getOctave(){
-  // read the DIP switches
-  if (PTH_PTH0)
-    return 0; 
-  else if (PTH_PTH1)
-    return 1;
-  else if (PTH_PTH2)
-    return 2;
-  else if (PTH_PTH3)
-    return 3;
-  else if (PTH_PTH4)
-    return 4;
-  else if (PTH_PTH5)
-    return 5;
-  else if (PTH_PTH6)
-    return 6;
-  else if (PTH_PTH7)
-    return 7;
-}
