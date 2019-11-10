@@ -1,7 +1,7 @@
 #include <hidef.h>      /* common defines and macros: file found in CodeWarrior folder */
 #include "derivative.h"      /* derivative-specific definitions (e.g.: PORTA, DDDRK) */
 //#include <string>
-
+#include "notes.h"
 
 #define column0 0x01
 #define column1 0x02
@@ -87,7 +87,23 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   PIEH = 0xFF;
   // select the polarities of PORTH to either be falling edge(0) or rising edge(1)
   PPSH = 0xFF;
-   
+  
+  // -------------- PWM Setup --------------  
+  
+  // PWM registers:
+  // PWMCTL (PWM Control Register): 
+  
+  // 1. Setup PWM channel A
+  // 2. Set prescale factor
+  // 3. Set alignment
+  // 4. Assign period value
+  // 5. Assign duty cycle
+  
+  PWMCLK = 0x00; // Selects clock A as the clcock source to PWM0
+  PWMPOL = 0x01;
+  PWMCTL = 0x0C;
+  PWMCAE = 0x00;
+  PWMPRCLK = 0x04; // prescale set
    
   // -------------- Get input from keypad --------------
   while(1){
@@ -103,21 +119,36 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     
     if(PORTA != column0){
       while(PORTA_BIT4){//a flat
-        playSound('a', 1, 1);
+        playSound('a', 1, octave);
         //displayNote();
+        
+        // enable PWM signal
+        PWME = 0x01;
       }
       while(PORTA_BIT5){//a
-        playSound('a', 0, 1);
+        playSound('a', 0, octave);
         //displayNote();
+        
+        
+        PWME = 0x01;
       }
       while(PORTA_BIT6){//e flat
-        playSound('e', 1, 1);
+        playSound('e', 1, octave);
         //displayNote();
+        
+        
+        PWME = 0x01;
       }
       while(PORTA_BIT7){//e
-        playSound('e', 0, 1);
+        playSound('e', 0, octave);
         //displayNote();
+        
+        
+        PWME = 0x01;
       }
+      
+      // disable PWM
+      PWME = 0x00;
     }
     
     PORTA_BIT0 = 0;
@@ -127,20 +158,28 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     
     if(PORTA != column1){
       while(PORTA_BIT4){//b flat
-        playSound('b', 1, 1);
+        playSound('b', 1, octave);
         //displayNote();
+        
+        PWME = 0x01;
       }
       while(PORTA_BIT5){//b
-        playSound('b', 0, 1);
+        playSound('b', 0, octave);
         //displayNote();
+        
+        PWME = 0x01;
       }
       while(PORTA_BIT6){
         //Nothing
       }
       while(PORTA_BIT7){//f
-        playSound('f', 0, 1);
+        playSound('f', 0, octave);
         //displayNote();
+        
+        PWME = 0x01;
       }
+      
+      PWME = 0x00;
     } 
     
     PORTA_BIT1 = 0;
@@ -153,17 +192,25 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
         //Nothing
       }
       while(PORTA_BIT5){//c
-        playSound('c', 0, 1);
+        playSound('c', 0, octave);
         //displayNote();
+        
+        PWME = 0x01;
       }
       while(PORTA_BIT6){//g flat
-        playSound('g', 1, 1);
+        playSound('g', 1, octave);
         //displayNote();
+        
+        PWME = 0x01;
       }
       while(PORTA_BIT7){//g
-        playSound('g', 0, 1);
+        playSound('g', 0, octave);
         //displayNote();
+        
+        PWME = 0x01;
       } 
+      
+      PWME = 0x00;
     } 
     
     PORTA_BIT2 = 0;
@@ -173,12 +220,16 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     
     if(PORTA != column3){
      while(PORTA_BIT4){//a flat
-        playSound('d', 1, 1);
+        playSound('d', 1, octave);
         //displayNote();
+        
+        PWME = 0x01;
       }
       while(PORTA_BIT5){//a
-        playSound('d', 0, 1);
+        playSound('d', 0, octave);
         //displayNote();
+        
+        PWME = 0x01;
       }
       while(PORTA_BIT6){
         //Nothing
@@ -186,7 +237,10 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       while(PORTA_BIT7){
         //Nothing
       } 
+      
+      PWME = 0x00;
     }
+    
     PORTA_BIT3 = 0;
   }      
     
@@ -194,47 +248,56 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 
 // ------------------ playSound Function ------------------
 void playSound(char note, int flat, int octave){
+
+  // PWMPER0 period
+  // PWMDTY0 duty cycle
+
   switch(note){
     case 'a':
       if(flat == 1){
-          
+        PWMPER0 = noteAb/(2^octave);
       } else{
-        
+        PWMPER0 = noteA/(2^octave);
       }
       break;
     case 'b':
       if(flat == 1){
-          
+        PWMPER0 = noteBb/(2^octave);
       } else{
-        
+        PWMPER0 = noteB/(2^octave);
       }
       break;
     case 'c':
+      PWMPER0 = noteC/(2^octave);
+      break;
     case 'd':
       if(flat == 1){
-          
+        PWMPER0 = noteDb/(2^octave);
       } else{
-        
+        PWMPER0 = noteD/(2^octave);
       }
       break;
     case 'e':
       if(flat == 1){
-          
+        PWMPER0 = noteEb/(2^octave);
       } else{
-        
+        PWMPER0 = noteE/(2^octave);
       }
       break;
     case 'f':
+      PWMPER0 = noteF/(2^octave);
       break;
     case 'g':
       if(flat == 1){
-          
+        PWMPER0 = noteGb/(2^octave);
       } else{
-        
+        PWMPER0 = noteG/(2^octave);
       }
       break;
-    
   }
+  
+  // Set the octave
+  PWMDTY0 = PWMPER0/2;
 }
 
 
