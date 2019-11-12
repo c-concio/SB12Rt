@@ -48,7 +48,9 @@ interrupt void changeOctave(void){
   else if (PTH_PTH7){
     octave = 7; 
     PTH_PTH7 = 0;
-  }         
+  }    
+    
+  PIFH = 0xFF;   
 }
 
 #pragma CODE_SEG DEFAULT
@@ -86,7 +88,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   
   PORTA = 0x00;
   
-  /*
+  
   
   // Setup interrupts to work with PORTH
   // enable all pins in PORTH to cause interrupts
@@ -105,6 +107,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   // 4. Assign period value
   // 5. Assign duty cycle
   
+  /*
   PWMCLK = 0x00; // Selects clock A as the clcock source to PWM0
   PWMPOL = 0x01;
   PWMCTL = 0x0C;
@@ -126,6 +129,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PTP_PTP2 = 1;
     PTP_PTP3 = 1;
     
+    PORTB = 0x00;
     
     
     // ----- COLUMN 0 -----

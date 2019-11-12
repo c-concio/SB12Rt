@@ -1,5 +1,5 @@
 *** EVALUATION ***
-PROGRAM "C:\Users\chris\OneDrive\Documents\CodeWarrior Projects\Coen317Project\bin\Project.abs"
+PROGRAM "C:\Users\chris\OneDrive\Documents\CodeWarrior Projects\Coen317Project\COEN317\Coen317Project\bin\Project.abs"
 
 *********************************************************************************************
 TARGET SECTION
@@ -15,6 +15,7 @@ FILE SECTION
 mc9s12dg256.c.o                         Model: BANKED,        Lang: ANSI-C
 main.cpp.o                              Model: BANKED,        Lang: C++
 Start12.cpp.o                           Model: BANKED,        Lang: C++
+rtshc12.c.o (ansibi.lib)                Model: BANKED,        Lang: ANSI-C
 
 *********************************************************************************************
 STARTUP SECTION
@@ -22,12 +23,13 @@ STARTUP SECTION
 Entry point: 0xC000 (_Startup)
 _startupData is allocated at 0xC00B and uses 14 Bytes
 extern struct _tagStartup {
-  unsigned nofZeroOut     0
-  _Copy    *toCopyDownBeg 0xC01D
+  unsigned nofZeroOut     1
+  _Range   pZeroOut       0x1100     2
+  _Copy    *toCopyDownBeg 0xC0C6
   int      nofInitBodies  0
-  _Cpp     *initBodies    0xC019
+  _Cpp     *initBodies    0xC01D
   int      nofFiniBodies  0
-  _Cpp     *finiBodies    0xC019
+  _Cpp     *finiBodies    0xC01D
 } _startupData;
 
 *********************************************************************************************
@@ -36,8 +38,9 @@ Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
 .init                             11     R     0xC000     0xC00A   ROM_C000
 .startData                        18     R     0xC00B     0xC01C   ROM_C000
-.copy                              2     R     0xC01D     0xC01E   ROM_C000
-.text                            146     R   0x308000   0x308091   PAGE_30
+NON_BANKED                       169     R     0xC01D     0xC0C5   ROM_C000
+.copy                              2     R     0xC0C6     0xC0C7   ROM_C000
+.text                            701     R   0x308000   0x3082BC   PAGE_30
 .stack                           256   R/W     0x1000     0x10FF   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
 .abs_section_9                     1   N/I        0x9        0x9   .absSeg1
@@ -380,11 +383,13 @@ Section Name                    Size  Type     From       To       Segment
 .abs_section_17e                   2   N/I      0x17E      0x17F   .absSeg338
 .abs_section_2ae                   2   N/I      0x2AE      0x2AF   .absSeg339
 .abs_section_2be                   2   N/I      0x2BE      0x2BF   .absSeg340
-.vectSeg341_vect                   2     R     0xFFFE     0xFFFF   .vectSeg341
+.abs_section_ffcc                  2     R     0xFFCC     0xFFCD   .absSeg341
+.common                            2   R/W     0x1100     0x1101   RAM
+.vectSeg342_vect                   2     R     0xFFFE     0xFFFF   .vectSeg342
 
 Summary of section sizes per section type:
-READ_ONLY (R):          B3 (dec:      179)
-READ_WRITE (R/W):      100 (dec:      256)
+READ_ONLY (R):         389 (dec:      905)
+READ_WRITE (R/W):      102 (dec:      258)
 NO_INIT (N/I):         190 (dec:      400)
 
 *********************************************************************************************
@@ -601,7 +606,7 @@ MODULE:                 -- mc9s12dg256.c.o --
      _PPSM                                      255       1       1       0   .abs_section_255
      _WOMM                                      256       1       1       0   .abs_section_256
      _MODRR                                     257       1       1       0   .abs_section_257
-     _PTP                                       258       1       1       0   .abs_section_258
+     _PTP                                       258       1       1      10   .abs_section_258
      _PTIP                                      259       1       1       0   .abs_section_259
      _DDRP                                      25A       1       1       1   .abs_section_25a
      _RDRP                                      25B       1       1       0   .abs_section_25b
@@ -609,13 +614,13 @@ MODULE:                 -- mc9s12dg256.c.o --
      _PPSP                                      25D       1       1       0   .abs_section_25d
      _PIEP                                      25E       1       1       0   .abs_section_25e
      _PIFP                                      25F       1       1       0   .abs_section_25f
-     _PTH                                       260       1       1       0   .abs_section_260
+     _PTH                                       260       1       1      16   .abs_section_260
      _PTIH                                      261       1       1       0   .abs_section_261
-     _DDRH                                      262       1       1       0   .abs_section_262
+     _DDRH                                      262       1       1       1   .abs_section_262
      _RDRH                                      263       1       1       0   .abs_section_263
      _PERH                                      264       1       1       0   .abs_section_264
-     _PPSH                                      265       1       1       0   .abs_section_265
-     _PIEH                                      266       1       1       0   .abs_section_266
+     _PPSH                                      265       1       1       1   .abs_section_265
+     _PIEH                                      266       1       1       1   .abs_section_266
      _PIFH                                      267       1       1       0   .abs_section_267
      _PTJ                                       268       1       1       0   .abs_section_268
      _PTIJ                                      269       1       1       0   .abs_section_269
@@ -682,7 +687,7 @@ MODULE:                 -- mc9s12dg256.c.o --
      _CAN4TXDSR7                                2BB       1       1       0   .abs_section_2bb
      _CAN4TXDLR                                 2BC       1       1       0   .abs_section_2bc
      _CAN4TXTBPR                                2BD       1       1       0   .abs_section_2bd
-     _PORTAB                                      0       2       2       9   .abs_section_0
+     _PORTAB                                      0       2       2      41   .abs_section_0
      _DDRAB                                       2       2       2       2   .abs_section_2
      _PARTID                                     1A       2       2       0   .abs_section_1a
      _TCNT                                       44       2       2       0   .abs_section_44
@@ -743,35 +748,47 @@ MODULE:                 -- mc9s12dg256.c.o --
      _CAN4TXTSR                                 2BE       2       2       0   .abs_section_2be
 MODULE:                 -- main.cpp.o --
 - PROCEDURES:
-     main                                    308000      52      82       2   .text       
-     playSound__FSci                         308052       1       1       2   .text       
-     displayNote__Fv                         308053       1       1       2   .text       
+     main                                    308000     152     338      14   .text       
+     playSound__FSciT1                       308152       1       1       4   .text       
+     displayNote__FSci                       308153     12C     300      17   .text       
+     changeOctave__Fv                          C01D      75     117       1   NON_BANKED  
 - VARIABLES:
+     _vect                                     FFCC       2       2       0   .abs_section_ffcc
+     octave                                    1100       2       2       3   .common     
 MODULE:                 -- Start12.cpp.o --
 - PROCEDURES:
-     Init__Fv                                308054      3E      62       2   .text       
+     Init__Fv                                30827F      3E      62       2   .text       
      _Startup                                  C000       B      11       0   .init       
 - VARIABLES:
      _startupData                              C00B       E      14       5   .startData  
 - LABELS:
      __SEG_END_SSTACK                          1100       0       0       1               
+MODULE:                 -- rtshc12.c.o (ansibi.lib) --
+- PROCEDURES:
+     _LCMP                                     C092      19      25       1   NON_BANKED  
+     _ILSEXT                                   C0AB       7       7       1   NON_BANKED  
+     _CASE_CHECKED_BYTE                        C0B2      14      20       1   NON_BANKED  
+- VARIABLES:
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   mc9s12dg256.c.o                            400      0      0
-  main.cpp.o                                   0     84      0
+  main.cpp.o                                   2    756      2
   Start12.cpp.o                                0     73      0
+  rtshc12.c.o (ansibi.lib)                     0     52      0
   other                                      256     20      2
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  main playSound__FSci displayNote__Fv Init__Fv 
+  main playSound__FSciT1 displayNote__FSci Init__Fv 
 SECTION: ".init"
   _Startup 
+SECTION: "NON_BANKED"
+  changeOctave__Fv _LCMP _ILSEXT _CASE_CHECKED_BYTE 
 SECTION: ".abs_section_8"
   _PORTE 
 SECTION: ".abs_section_9"
@@ -1454,12 +1471,16 @@ SECTION: ".abs_section_2ae"
   _CAN4RXTSR 
 SECTION: ".abs_section_2be"
   _CAN4TXTSR 
+SECTION: ".abs_section_ffcc"
+  _vect 
+SECTION: ".common"
+  octave 
 
 *********************************************************************************************
 OBJECT LIST SORTED BY ADDRESS
      Name                                      Addr   hSize   dSize     Ref    Section   RLIB
 ---------------------------------------------------------------------------------------------
-     _PORTAB                                      0       2       2       9   .abs_section_0
+     _PORTAB                                      0       2       2      41   .abs_section_0
      _DDRAB                                       2       2       2       2   .abs_section_2
      _PORTE                                       8       1       1       0   .abs_section_8
      _DDRE                                        9       1       1       0   .abs_section_9
@@ -1717,7 +1738,7 @@ OBJECT LIST SORTED BY ADDRESS
      _PPSM                                      255       1       1       0   .abs_section_255
      _WOMM                                      256       1       1       0   .abs_section_256
      _MODRR                                     257       1       1       0   .abs_section_257
-     _PTP                                       258       1       1       0   .abs_section_258
+     _PTP                                       258       1       1      10   .abs_section_258
      _PTIP                                      259       1       1       0   .abs_section_259
      _DDRP                                      25A       1       1       1   .abs_section_25a
      _RDRP                                      25B       1       1       0   .abs_section_25b
@@ -1725,13 +1746,13 @@ OBJECT LIST SORTED BY ADDRESS
      _PPSP                                      25D       1       1       0   .abs_section_25d
      _PIEP                                      25E       1       1       0   .abs_section_25e
      _PIFP                                      25F       1       1       0   .abs_section_25f
-     _PTH                                       260       1       1       0   .abs_section_260
+     _PTH                                       260       1       1      16   .abs_section_260
      _PTIH                                      261       1       1       0   .abs_section_261
-     _DDRH                                      262       1       1       0   .abs_section_262
+     _DDRH                                      262       1       1       1   .abs_section_262
      _RDRH                                      263       1       1       0   .abs_section_263
      _PERH                                      264       1       1       0   .abs_section_264
-     _PPSH                                      265       1       1       0   .abs_section_265
-     _PIEH                                      266       1       1       0   .abs_section_266
+     _PPSH                                      265       1       1       1   .abs_section_265
+     _PIEH                                      266       1       1       1   .abs_section_266
      _PIFH                                      267       1       1       0   .abs_section_267
      _PTJ                                       268       1       1       0   .abs_section_268
      _PTIJ                                      269       1       1       0   .abs_section_269
@@ -1800,20 +1821,36 @@ OBJECT LIST SORTED BY ADDRESS
      _CAN4TXDLR                                 2BC       1       1       0   .abs_section_2bc
      _CAN4TXTBPR                                2BD       1       1       0   .abs_section_2bd
      _CAN4TXTSR                                 2BE       2       2       0   .abs_section_2be
+     octave                                    1100       2       2       3   .common     
      _Startup                                  C000       B      11       0   .init       
-     main                                    308000      52      82       2   .text       
-     playSound__FSci                         308052       1       1       2   .text       
-     displayNote__Fv                         308053       1       1       2   .text       
-     Init__Fv                                308054      3E      62       2   .text       
+     changeOctave__Fv                          C01D      75     117       1   NON_BANKED  
+     _LCMP                                     C092      19      25       1   NON_BANKED  
+     _ILSEXT                                   C0AB       7       7       1   NON_BANKED  
+     _CASE_CHECKED_BYTE                        C0B2      14      20       1   NON_BANKED  
+     _vect                                     FFCC       2       2       0   .abs_section_ffcc
+     main                                    308000     152     338      14   .text       
+     playSound__FSciT1                       308152       1       1       4   .text       
+     displayNote__FSci                       308153     12C     300      17   .text       
+     Init__Fv                                30827F      3E      62       2   .text       
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
 ---------------------------------------------------------------------------------------------
+NOT USED PROCEDURES
+rtshc12.c.o (ansibi.lib):
+  _BSHL _BSHRS _BSHRU _BDIVMODU _BDIVMODS _ISHL _ISHRU _ISHRS _LSHL _LSHRU 
+  _LSHRS _LADD _LSUB _LAND _LOR _LXOR _LCMP_P _LCMP_PP _LNEG _LCOM _LINC _LDEC 
+  _LMUL _LMULU16x32 _LMULS16x32 _lDivMod _LDIVU _NEG_P _LDIVS _LMODU _LMODS 
+  _COPY _CASE_DIRECT _CASE_DIRECT_BYTE _CASE_CHECKED _CASE_SEARCH 
+  _CASE_SEARCH_BYTE _CASE_SEARCH_8 _CASE_SEARCH_8_BYTE _FCALL _FPCMP 
+NOT USED VARIABLES
+rtshc12.c.o (ansibi.lib):
+  _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
 
 *********************************************************************************************
 COPYDOWN SECTION
 ---------------------------------------------------------------------------------------------
-------- ROM-ADDRESS: 0xC01D ---- SIZE       2 ---
+------- ROM-ADDRESS: 0xC0C6 ---- SIZE       2 ---
 Filling bytes inserted
  0000
 
@@ -1821,8 +1858,12 @@ Filling bytes inserted
 OBJECT-DEPENDENCIES SECTION
 ---------------------------------------------------------------------------------------------
 _Startup                  USES __SEG_END_SSTACK Init__Fv main 
-main                      USES _DDRAB _DDRP _PORTAB displayNote__Fv 
-                                playSound__FSci 
+changeOctave__Fv          USES _PORTAB _PTH octave 
+_vect                     USES changeOctave__Fv 
+main                      USES _DDRAB _DDRP _DDRH _PORTAB _PIEH _PPSH _PTP 
+                                main displayNote__FSci octave playSound__FSciT1 
+displayNote__FSci         USES _CASE_CHECKED_BYTE displayNote__FSci _PORTAB 
+                                _PTP _ILSEXT _LCMP 
 Init__Fv                  USES _startupData 
 
 *********************************************************************************************
@@ -1832,9 +1873,15 @@ DEPENDENCY TREE
  | 
  +- main                
  |  | 
- |  +- displayNote__Fv     
- |  |    
- |  +- playSound__FSci     
+ |  +- displayNote__FSci   
+ |  |  | 
+ |  |  +- _CASE_CHECKED_BYTE  
+ |  |  |    
+ |  |  +- _ILSEXT             
+ |  |  |    
+ |  |  +- _LCMP               
+ |  |       
+ |  +- playSound__FSciT1   
  |       
  +- _Startup            
     | 
@@ -1842,12 +1889,16 @@ DEPENDENCY TREE
     |    
     +- main                 (see above)
        
+ _vect               
+ | 
+ +- changeOctave__Fv    
+      
 *********************************************************************************************
 STATISTIC SECTION
 ---------------------------------------------------------------------------------------------
 
 ExeFile:
 --------
-Number of blocks to be downloaded: 5
-Total size of all blocks to be downloaded: 179
+Number of blocks to be downloaded: 7
+Total size of all blocks to be downloaded: 905
 
