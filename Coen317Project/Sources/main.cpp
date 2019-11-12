@@ -144,28 +144,28 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
         displayNote('a', 1);
         
         // enable PWM signal
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT5){//a
         //playSound('a', 0, octave);
         displayNote('a', 0);
         
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT6){//e flat
         playSound('e', 1, octave);
         displayNote('e', 1);
         
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT7){//e
         playSound('e', 0, octave);
         displayNote('e', 0);
         
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       
       // disable PWM
@@ -184,13 +184,13 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
         playSound('b', 1, octave);
         displayNote('b', 1);
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT5){//b
         playSound('b', 0, octave);
         displayNote('b', 0);
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT6){
         //Nothing
@@ -199,7 +199,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
         playSound('f', 0, octave);
         displayNote('f', 0);
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       
       //PWME = 0x00;
@@ -220,19 +220,19 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
         playSound('c', 0, octave);
         displayNote('c', 0);
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT6){//g flat
         playSound('g', 1, octave);
         displayNote('g', 1);
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT7){//g
         playSound('g', 0, octave);
         displayNote('g', 0);
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       } 
       
       //PWME = 0x00;
@@ -250,13 +250,13 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
         playSound('d', 1, octave);
         displayNote('d', 1);
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT5){//a
         playSound('d', 0, octave);
         displayNote('d', 0);
         
-        //PWME = 0x01;
+        //PWME = 0x80;
       }
       while(PORTA_BIT6){
         //Nothing
