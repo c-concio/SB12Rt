@@ -305,7 +305,8 @@ void playSound(char note, int flat, int octave){
  void displayNote(char note, int flat){
   
   
-  switch (char note) // <--- can i do this??
+  switch (note) {
+    
 	 
 		case 'a':
 		 //key="1";
@@ -319,6 +320,7 @@ void playSound(char note, int flat, int octave){
 		 PTP=0x08;
 		 PORTB=0x7c;    //Display root note with a "b" prefix
 		 }
+		 break;
 		 
 		case 'b':
 		 //key="2";
@@ -332,6 +334,7 @@ void playSound(char note, int flat, int octave){
 		  PTP=0x08;
 		 PORTB=0x7c;
 		 }
+		 break;
 		 
 		case 'd':
 		 //key="A";
@@ -345,11 +348,13 @@ void playSound(char note, int flat, int octave){
 		  PTP=0x08;
 		 PORTB=0x7c;
 		 }
+		 break;
 		 
 		case 'c':       //no C flat
 		 //key="6";
 		 PTP=0x04;
 		 PORTB=0x58;
+		 break;
 		 
 		 
 		case 'e':
@@ -364,6 +369,7 @@ void playSound(char note, int flat, int octave){
 		  PTP=0x08;
 		 PORTB=0x7c;
 		}
+		break;
 		
 		case 'g':
 		// key="9";
@@ -377,10 +383,14 @@ void playSound(char note, int flat, int octave){
 		  PTP=0x08;
 		 PORTB=0x7c;
 		}
+		break;
 	
 		case 'f':        // no F flat
 		 //key="0";
 		 PTP=0x04;
 		 PORTB=0x71;
+		 break;
+		 
+  }
 		 
 }
