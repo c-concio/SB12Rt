@@ -300,4 +300,87 @@ void playSound(char note, int flat, int octave){
   PWMDTY0 = PWMPER0/2;
 }
 
-
+ //-------------------Display on 7-segment--------------------
+ 
+ void displayNote(char note, int flat){
+  
+  
+  switch (char note) // <--- can i do this??
+	 
+		case 'a':
+		 //key="1";
+		 if(flat==0){   //if flat==0 (ie: regular root note)
+		 PTP=0x04;
+		 PORTB=0x77;   //display just root note
+		 }
+		 if(flat==1){    // if flat==1 (ie: flat note)
+		 PTP=0x04;
+		 PORTB=0x77;  
+		 PTP=0x08;
+		 PORTB=0x7c;    //Display root note with a "b" prefix
+		 }
+		 
+		case 'b':
+		 //key="2";
+		 if (flat==0){
+		 PTP=0x04;
+		 PORTB=0x7C;
+		 }
+		 if(flat==1){
+		 PTP=0x04;
+		 PORTB=0x7C;
+		  PTP=0x08;
+		 PORTB=0x7c;
+		 }
+		 
+		case 'd':
+		 //key="A";
+		 if(flat==0){
+		 PTP=0x04;
+		 PORTB=0x5e;
+		 }
+		 if (flat==1){
+		 PTP=0x04;
+		 PORTB=0x5e;
+		  PTP=0x08;
+		 PORTB=0x7c;
+		 }
+		 
+		case 'c':       //no C flat
+		 //key="6";
+		 PTP=0x04;
+		 PORTB=0x58;
+		 
+		 
+		case 'e':
+		// key="7";
+		if(flat==0){
+			PTP=0x04;
+		 PORTB=0x79;
+		}
+		if(flat==1){
+		PTP=0x04;
+		 PORTB=0x79;
+		  PTP=0x08;
+		 PORTB=0x7c;
+		}
+		
+		case 'g':
+		// key="9";
+		if(flat==0){
+			PTP=0x04;
+		PORTB= 0x6f;
+		}
+		if(flat==1){
+		PTP=0x04;
+		PORTB= 0x6f;
+		  PTP=0x08;
+		 PORTB=0x7c;
+		}
+	
+		case 'f':        // no F flat
+		 //key="0";
+		 PTP=0x04;
+		 PORTB=0x71;
+		 
+}
