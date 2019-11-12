@@ -16,6 +16,7 @@ int octave;
 
 // ISR functions
 interrupt void changeOctave(void){
+  PORTB = 0x01;
   if (PTH_PTH0){
     octave = 0; 
     PTH_PTH0 = 0;
@@ -70,17 +71,22 @@ int getOctave();
 
 void main(void) { // in Assembly code, this is treated as a SubRoutine
 
+  EnableInterrupts;
 
   // -------------- Variables --------------                 
   
-
+                                                         
 
   // Data Direction Register Setup
   DDRA = 0x0F;  // Keypad
   DDRB = 0xFF;  // Cathodes of 7Seg
   DDRP = 0xFF;  // 7Seg
+  DDRH = 0x00;
+  
   
   PORTA = 0x00;
+  
+  /*
   
   // Setup interrupts to work with PORTH
   // enable all pins in PORTH to cause interrupts
@@ -104,6 +110,8 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   PWMCTL = 0x0C;
   PWMCAE = 0x00;
   PWMPRCLK = 0x04; // prescale set
+  
+  */
    
   // -------------- Get input from keypad --------------
   while(1){
@@ -112,43 +120,53 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     // for all four columns, look through the MSB bits of port A and see if any of them is set
     // if not set, go throught the other columns
     
+    // reset ptp pins
+    PTP_PTP0 = 1;
+    PTP_PTP1 = 1;
+    PTP_PTP2 = 1;
+    PTP_PTP3 = 1;
+    
     
     
     // ----- COLUMN 0 -----
     PORTA_BIT0 = 1;
     
     if(PORTA != column0){
+      // disable interrupts
+      //asm(SWI);
+    
       while(PORTA_BIT4){//a flat
         playSound('a', 1, octave);
-        //displayNote();
+        displayNote('a', 1);
         
         // enable PWM signal
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT5){//a
-        playSound('a', 0, octave);
-        //displayNote();
+        //playSound('a', 0, octave);
+        displayNote('a', 0);
         
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT6){//e flat
         playSound('e', 1, octave);
-        //displayNote();
+        displayNote('e', 1);
         
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT7){//e
         playSound('e', 0, octave);
-        //displayNote();
+        displayNote('e', 0);
         
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       
       // disable PWM
-      PWME = 0x00;
+      //PWME = 0x00;
+      //asm(CLI);
     }
     
     PORTA_BIT0 = 0;
@@ -157,29 +175,31 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT1 = 1; 
     
     if(PORTA != column1){
+      //asm(SWI);
       while(PORTA_BIT4){//b flat
         playSound('b', 1, octave);
-        //displayNote();
+        displayNote('b', 1);
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT5){//b
         playSound('b', 0, octave);
-        //displayNote();
+        displayNote('b', 0);
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT6){
         //Nothing
       }
       while(PORTA_BIT7){//f
         playSound('f', 0, octave);
-        //displayNote();
+        displayNote('f', 0);
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       
-      PWME = 0x00;
+      //PWME = 0x00;
+      //asm(CLI);
     } 
     
     PORTA_BIT1 = 0;
@@ -188,29 +208,31 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT2 = 1;
     
     if(PORTA != column2){
+      //asm(SWI);
      while(PORTA_BIT4){
         //Nothing
       }
       while(PORTA_BIT5){//c
         playSound('c', 0, octave);
-        //displayNote();
+        displayNote('c', 0);
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT6){//g flat
         playSound('g', 1, octave);
-        //displayNote();
+        displayNote('g', 1);
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT7){//g
         playSound('g', 0, octave);
-        //displayNote();
+        displayNote('g', 0);
         
-        PWME = 0x01;
+        //PWME = 0x01;
       } 
       
-      PWME = 0x00;
+      //PWME = 0x00;
+      //asm(CLI);
     } 
     
     PORTA_BIT2 = 0;
@@ -219,17 +241,18 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT3 = 1;      
     
     if(PORTA != column3){
+     //asm(SWI);
      while(PORTA_BIT4){//a flat
         playSound('d', 1, octave);
-        //displayNote();
+        displayNote('d', 1);
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT5){//a
         playSound('d', 0, octave);
-        //displayNote();
+        displayNote('d', 0);
         
-        PWME = 0x01;
+        //PWME = 0x01;
       }
       while(PORTA_BIT6){
         //Nothing
@@ -238,7 +261,8 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
         //Nothing
       } 
       
-      PWME = 0x00;
+      //PWME = 0x00;
+      //asm(CLI);
     }
     
     PORTA_BIT3 = 0;
@@ -251,6 +275,8 @@ void playSound(char note, int flat, int octave){
 
   // PWMPER0 period
   // PWMDTY0 duty cycle
+
+  /*
 
   switch(note){
     case 'a':
@@ -298,6 +324,7 @@ void playSound(char note, int flat, int octave){
   
   // Set the octave
   PWMDTY0 = PWMPER0/2;
+  */
 }
 
  //-------------------Display on 7-segment--------------------
@@ -307,90 +334,169 @@ void playSound(char note, int flat, int octave){
   
   switch (note) {
     
-	 
+	  // ----- NOTE A -----
 		case 'a':
 		 //key="1";
 		 if(flat==0){   //if flat==0 (ie: regular root note)
-		 PTP=0x04;
-		 PORTB=0x77;   //display just root note
+  		 PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 0;
+  		 PTP_PTP3 = 1;
+  		 PORTB=0x77;   //display just root note
 		 }
 		 if(flat==1){    // if flat==1 (ie: flat note)
-		 PTP=0x04;
-		 PORTB=0x77;  
-		 PTP=0x08;
-		 PORTB=0x7c;    //Display root note with a "b" prefix
+  		 PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 0;
+  		 PTP_PTP3 = 1;
+  		 PORTB=0x77;
+  		 
+  		 // delay
+  		 for(int i =0;i>100000;i++){
+  		 }
+  		 
+  		 PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 1;
+  		 PTP_PTP3 = 0;
+  		 PORTB=0x7c;    //Display root note with a "b" prefix
 		 }
 		 break;
-		 
+		
+		// ----- NOTE B ----- 
 		case 'b':
 		 //key="2";
 		 if (flat==0){
-		 PTP=0x04;
-		 PORTB=0x7C;
+  		 PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 0;
+  		 PTP_PTP3 = 1;
+  		 PORTB=0x7C;
 		 }
 		 if(flat==1){
-		 PTP=0x04;
-		 PORTB=0x7C;
-		  PTP=0x08;
-		 PORTB=0x7c;
+  	   PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 0;
+  		 PTP_PTP3 = 1;
+  	   PORTB=0x7C;
+  	   
+  	   for(int i =0;i>100000;i++){
+  		 }
+  		 
+  		 PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 1;
+  		 PTP_PTP3 = 0;
+  	  
+  	   PORTB=0x7c;
 		 }
 		 break;
 		 
+		 // ----- NOTE C -----  
+		case 'c':
+	   PTP_PTP0 = 1;
+		 PTP_PTP1 = 1;
+		 PTP_PTP2 = 0;
+		 PTP_PTP3 = 1;
+		 PORTB=0x39;
+		
+		 break;
+		 
+		// ----- NOTE D -----   
 		case 'd':
 		 //key="A";
 		 if(flat==0){
-		 PTP=0x04;
-		 PORTB=0x5e;
+		   PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 0;
+  		 PTP_PTP3 = 1;
+  		 PORTB=0x5E;
 		 }
 		 if (flat==1){
-		 PTP=0x04;
-		 PORTB=0x5e;
-		  PTP=0x08;
-		 PORTB=0x7c;
+  	   PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 0;
+  		 PTP_PTP3 = 1;
+  	   PORTB=0x5E;
+  	   
+  	   for(int i =0;i>100000;i++){
+  		 }
+  		 
+  		 PTP_PTP0 = 1;
+  		 PTP_PTP1 = 1;
+  		 PTP_PTP2 = 1;
+  		 PTP_PTP3 = 0;
+  	   PORTB=0x7C;
 		 }
 		 break;
-		 
-		case 'c':       //no C flat
-		 //key="6";
-		 PTP=0x04;
-		 PORTB=0x58;
-		 break;
-		 
-		 
+		
+		
+  	// ----- NOTE E -----  	 
 		case 'e':
 		// key="7";
-		if(flat==0){
-			PTP=0x04;
-		 PORTB=0x79;
+		if(flat==0){		
+      PTP_PTP0 = 1;
+  	  PTP_PTP1 = 1;
+  	  PTP_PTP2 = 0;
+  	  PTP_PTP3 = 1;
+  	  PORTB=0x79;
 		}
 		if(flat==1){
-		PTP=0x04;
-		 PORTB=0x79;
-		  PTP=0x08;
-		 PORTB=0x7c;
+      PTP_PTP0 = 1;
+    	PTP_PTP1 = 1;
+    	PTP_PTP2 = 0;
+    	PTP_PTP3 = 1;
+      PORTB=0x79;
+       
+      for(int i =0;i>100000;i++){
+    	}
+    	 
+    	PTP_PTP0 = 1;
+    	PTP_PTP1 = 1;
+    	PTP_PTP2 = 1;
+    	PTP_PTP3 = 0;
+      PORTB=0x7C;
 		}
 		break;
 		
+		// ----- NOTE F -----  
+		case 'f':    
+		  PTP_PTP0 = 1;
+  	  PTP_PTP1 = 1;
+  	  PTP_PTP2 = 0;
+  	  PTP_PTP3 = 1;
+  	  PORTB=0x71;
+		 break;
+		
+		// ----- NOTE G ----- 
 		case 'g':
 		// key="9";
 		if(flat==0){
-			PTP=0x04;
-		PORTB= 0x6f;
+	  	PTP_PTP0 = 1;
+  	  PTP_PTP1 = 1;
+  	  PTP_PTP2 = 0;
+  	  PTP_PTP3 = 1;
+  	  PORTB=0x3D;
 		}
 		if(flat==1){
-		PTP=0x04;
-		PORTB= 0x6f;
-		  PTP=0x08;
-		 PORTB=0x7c;
+  		PTP_PTP0 = 1;
+    	PTP_PTP1 = 1;
+    	PTP_PTP2 = 0;
+    	PTP_PTP3 = 1;
+      PORTB=0x3D;
+       
+      for(int i =0;i>100000;i++){
+    	}
+    	 
+    	PTP_PTP0 = 1;
+    	PTP_PTP1 = 1;
+    	PTP_PTP2 = 1;
+    	PTP_PTP3 = 0;
+      PORTB=0x7C;
 		}
 		break;
 	
-		case 'f':        // no F flat
-		 //key="0";
-		 PTP=0x04;
-		 PORTB=0x71;
-		 break;
-		 
+	
   }
 		 
 }
