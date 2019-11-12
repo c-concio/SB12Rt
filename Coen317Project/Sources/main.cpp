@@ -19,35 +19,35 @@ interrupt void changeOctave(void){
   PORTB = 0x01;
   if (PTH_PTH0){
     octave = 0; 
-    PTH_PTH0 = 0;
+    
   } 
   else if (PTH_PTH1){
     octave = 1; 
-    PTH_PTH1 = 0;
+    
   }  
   else if (PTH_PTH2){
     octave = 2; 
-    PTH_PTH2 = 0;
+    
   }   
   else if (PTH_PTH3){
     octave = 3; 
-    PTH_PTH3 = 0;
+    
   }   
   else if (PTH_PTH4){
     octave = 4; 
-    PTH_PTH4 = 0;
+    
   }   
   else if (PTH_PTH5){
     octave = 5; 
-    PTH_PTH5 = 0;
+    
   }   
   else if (PTH_PTH6){
     octave = 6; 
-    PTH_PTH6 = 0;
+    
   }   
   else if (PTH_PTH7){
     octave = 7; 
-    PTH_PTH7 = 0;
+    
   }    
     
   PIFH = 0xFF;   
