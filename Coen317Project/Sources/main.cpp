@@ -10,13 +10,19 @@
 
 // ------------------ Global Variable ------------------
 int octave;
+int period;
 
 // ------------------ Start of Interrupts Section ------------------
 #pragma CODE_SEG NON_BANKED
+            
+//ISR for timer
+interrupt void oc0ISR(void){
+  // add the to TC0 the period
+  TC5 = TC5 + (period/2);
+}
 
-// ISR functions
+// ISR function for DIP switches
 interrupt void changeOctave(void){
-  PORTB = 0x01;
   if (PTH_PTH0){
     octave = 0; 
     
@@ -61,14 +67,30 @@ const tIsrFunc _vect[] @0xFFCC = {
   changeOctave
 };
 
+ #pragma CODE_SEG DEFAULT /* change code section to DEFAULT (for Small Memory Model, this is $C000) */
+ // Interrupt Vector Table   
+ typedef void (*near tIsrFunc)(void); // keyword in HCS12 so that the following is in nonbanked (a PPAGE value is not added) memory
+ const tIsrFunc _vect2[] @0xFFE4 = { // 0xFFEE is the address to the enchanced capture timer of channel 0
+    /* Interrupt table */
+    oc0ISR // OC5 Interrupt
+ };
+
+
 // ------------------ End of Interrupts Section ------------------
 
 
-void playSound(char,int,int);
-void displayNote(char,int);
-int getOctave();
+void playSound(char,int);
+void displayNote(char,int);;
 
-  
+int pow(int a, int b){
+  if(b == 0)
+    return 1;
+  int val = a;
+  for (int i = 0; i < (b-1); i++){
+    val *= a;
+  }
+  return val;
+}
                                            
 
 void main(void) { // in Assembly code, this is treated as a SubRoutine
@@ -96,39 +118,28 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   // select the polarities of PORTH to either be falling edge(0) or rising edge(1)
   PPSH = 0xFF;
   
-  // -------------- PWM Setup --------------  
+  // ------------ Output Compare ------------
+  period = 10;
   
-  // PWM registers:
-  // PWMCTL (PWM Control Register): 
+  TSCR1 = 0x10; // clear all flags (TFFCA)
+  TSCR2 = 0x06; // set prescaler to 64
+  TIOS_IOS5 = 1; // set channel 0 as output compare
   
-  // 1. Setup PWM channel A
-  // 2. Set prescale factor
-  // 3. Set alignment
-  // 4. Assign period value
-  // 5. Assign duty cycle
+  TCTL1 = 0x0C; // sets the pin PT0 to high
+  TFLG1 = 0xFF; // clears all flags by setting to 1
   
-  /*
-  PWMCLK = 0x00; // Selects clock A as the clcock source to PWM0
-  PWMPOL = 0x01;
-  PWMCTL = 0x0C;
-  PWMCAE = 0x00;
-  PWMPRCLK = 0x04; // prescale set
+  TC5 = TCNT + period; // delay timer by 10 to start it off
+
+  TCTL1 = 0x04; // make the timer to toggle mode
+  TIE = 0x20; // enable interrupt  
   
-  */
-   
   // -------------- Get input from keypad --------------
   while(1){
     // Scan through all the columns and rows
     
     // for all four columns, look through the MSB bits of port A and see if any of them is set
     // if not set, go throught the other columns
-    
-    // reset ptp pins
-    PTP_PTP0 = 1;
-    PTP_PTP1 = 1;
-    PTP_PTP2 = 1;
-    PTP_PTP3 = 1;
-    
+       
     PORTB = 0x00;
     
     
@@ -136,41 +147,27 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT0 = 1;
     
     if(PORTA != column0){
-      // disable interrupts
-      //asm(SWI);
-    
       while(PORTA_BIT4){//a flat
-        playSound('a', 1, octave);
+        TSCR1_TEN = 1; // enable the timer
+        playSound('a', 1);
         displayNote('a', 1);
-        
-        // enable PWM signal
-        //PWME = 0x80;
       }
-      while(PORTA_BIT5){//a
-        //playSound('a', 0, octave);
+      while(PORTA_BIT5){//a       
+        TSCR1_TEN = 1;
+        playSound('a', 0);
         displayNote('a', 0);
-        
-        
-        //PWME = 0x80;
       }
-      while(PORTA_BIT6){//e flat
-        playSound('e', 1, octave);
+      while(PORTA_BIT6){//e flat   
+        TSCR1_TEN = 1;
+        playSound('e', 1);
         displayNote('e', 1);
-        
-        
-        //PWME = 0x80;
       }
-      while(PORTA_BIT7){//e
-        playSound('e', 0, octave);
+      while(PORTA_BIT7){//e      
+        TSCR1_TEN = 1;
+        playSound('e', 0);
         displayNote('e', 0);
-        
-        
-        //PWME = 0x80;
       }
-      
-      // disable PWM
-      //PWME = 0x00;
-      //asm(CLI);
+      TSCR1_TEN = 0; // disable the timer
     }
     
     PORTA_BIT0 = 0;
@@ -179,31 +176,25 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT1 = 1; 
     
     if(PORTA != column1){
-      //asm(SWI);
       while(PORTA_BIT4){//b flat
-        playSound('b', 1, octave);
+        TSCR1_TEN = 1;
+        playSound('b', 1);
         displayNote('b', 1);
-        
-        //PWME = 0x80;
       }
-      while(PORTA_BIT5){//b
-        playSound('b', 0, octave);
+      while(PORTA_BIT5){//b   
+        TSCR1_TEN = 1;
+        playSound('b', 0);
         displayNote('b', 0);
-        
-        //PWME = 0x80;
       }
       while(PORTA_BIT6){
         //Nothing
       }
-      while(PORTA_BIT7){//f
-        playSound('f', 0, octave);
+      while(PORTA_BIT7){//f   
+        TSCR1_TEN = 1;
+        playSound('f', 0);
         displayNote('f', 0);
-        
-        //PWME = 0x80;
-      }
-      
-      //PWME = 0x00;
-      //asm(CLI);
+      }            
+        TSCR1_TEN = 0;
     } 
     
     PORTA_BIT1 = 0;
@@ -212,31 +203,25 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT2 = 1;
     
     if(PORTA != column2){
-      //asm(SWI);
      while(PORTA_BIT4){
         //Nothing
       }
-      while(PORTA_BIT5){//c
-        playSound('c', 0, octave);
+      while(PORTA_BIT5){//c   
+        TSCR1_TEN = 1;
+        playSound('c', 0);
         displayNote('c', 0);
-        
-        //PWME = 0x80;
       }
-      while(PORTA_BIT6){//g flat
-        playSound('g', 1, octave);
+      while(PORTA_BIT6){//g flat 
+        TSCR1_TEN = 1;
+        playSound('g', 1);
         displayNote('g', 1);
-        
-        //PWME = 0x80;
       }
-      while(PORTA_BIT7){//g
-        playSound('g', 0, octave);
+      while(PORTA_BIT7){//g  
+        TSCR1_TEN = 1;
+        playSound('g', 0);
         displayNote('g', 0);
-        
-        //PWME = 0x80;
-      } 
-      
-      //PWME = 0x00;
-      //asm(CLI);
+      }     
+        TSCR1_TEN = 0;
     } 
     
     PORTA_BIT2 = 0;
@@ -246,27 +231,23 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     
     if(PORTA != column3){
      //asm(SWI);
-     while(PORTA_BIT4){//a flat
-        playSound('d', 1, octave);
+     while(PORTA_BIT4){//a flat  
+        TSCR1_TEN = 1;
+        playSound('d', 1);
         displayNote('d', 1);
-        
-        //PWME = 0x80;
       }
-      while(PORTA_BIT5){//a
-        playSound('d', 0, octave);
+      while(PORTA_BIT5){//a     
+        TSCR1_TEN = 1;
+        playSound('d', 0);
         displayNote('d', 0);
-        
-        //PWME = 0x80;
       }
       while(PORTA_BIT6){
         //Nothing
       }
       while(PORTA_BIT7){
         //Nothing
-      } 
-      
-      //PWME = 0x00;
-      //asm(CLI);
+      }          
+        TSCR1_TEN = 0;
     }
     
     PORTA_BIT3 = 0;
@@ -275,65 +256,58 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 }
 
 // ------------------ playSound Function ------------------
-void playSound(char note, int flat, int octave){
+void playSound(char note, int flat){
 
-  // PWMPER0 period
-  // PWMDTY0 duty cycle
-
-  /*
 
   switch(note){
     case 'a':
       if(flat == 1){
-        PWMPER0 = noteAb/(2^octave);
+        period = noteAb/pow(2, octave);
       } else{
-        PWMPER0 = noteA/(2^octave);
+        period = noteA/pow(2, octave);
       }
       break;
     case 'b':
       if(flat == 1){
-        PWMPER0 = noteBb/(2^octave);
+        period = noteBb/pow(2, octave);
       } else{
-        PWMPER0 = noteB/(2^octave);
+        period = noteB/pow(2, octave);
       }
       break;
     case 'c':
-      PWMPER0 = noteC/(2^octave);
+      period = noteC/pow(2, octave);
       break;
     case 'd':
       if(flat == 1){
-        PWMPER0 = noteDb/(2^octave);
+        period = noteDb/pow(2, octave);
       } else{
-        PWMPER0 = noteD/(2^octave);
+        period = noteD/pow(2, octave);
       }
       break;
     case 'e':
       if(flat == 1){
-        PWMPER0 = noteEb/(2^octave);
+        period = noteEb/pow(2, octave);
       } else{
-        PWMPER0 = noteE/(2^octave);
+        period = noteE/pow(2, octave);
       }
       break;
     case 'f':
-      PWMPER0 = noteF/(2^octave);
+      period = noteF/pow(2, octave);
       break;
     case 'g':
       if(flat == 1){
-        PWMPER0 = noteGb/(2^octave);
+        period = noteGb/pow(2, octave);
       } else{
-        PWMPER0 = noteG/(2^octave);
+        period = noteG/pow(2, octave);
       }
       break;
-  }
-  
-  // Set the octave
-  PWMDTY0 = PWMPER0/2;
-  */
+  }  
 }
 
  //-------------------Display on 7-segment--------------------
  
  void displayNote(char note, int flat){
+ 
   
   
   switch (note) {
@@ -356,7 +330,7 @@ void playSound(char note, int flat, int octave){
   		 PORTB=0x77;
   		 
   		 // delay
-  		 for(int i =0;i>100000;i++){
+  		 for(int i =0;i>10;i++){
   		 }
   		 
   		 PTP_PTP0 = 1;
@@ -384,7 +358,7 @@ void playSound(char note, int flat, int octave){
   		 PTP_PTP3 = 1;
   	   PORTB=0x7C;
   	   
-  	   for(int i =0;i>100000;i++){
+  	   for(int i =0;i>10;i++){
   		 }
   		 
   		 PTP_PTP0 = 1;
@@ -423,7 +397,7 @@ void playSound(char note, int flat, int octave){
   		 PTP_PTP3 = 1;
   	   PORTB=0x5E;
   	   
-  	   for(int i =0;i>100000;i++){
+  	   for(int i =0;i>10;i++){
   		 }
   		 
   		 PTP_PTP0 = 1;
@@ -452,7 +426,7 @@ void playSound(char note, int flat, int octave){
     	PTP_PTP3 = 1;
       PORTB=0x79;
        
-      for(int i =0;i>100000;i++){
+      for(int i =0;i>10;i++){
     	}
     	 
     	PTP_PTP0 = 1;
@@ -489,7 +463,7 @@ void playSound(char note, int flat, int octave){
     	PTP_PTP3 = 1;
       PORTB=0x3D;
        
-      for(int i =0;i>100000;i++){
+      for(int i =0;i>10;i++){
     	}
     	 
     	PTP_PTP0 = 1;
@@ -500,7 +474,7 @@ void playSound(char note, int flat, int octave){
 		}
 		break;
 	
-	
+	  
   }
-		 
+		
 }

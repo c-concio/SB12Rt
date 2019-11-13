@@ -1,17 +1,17 @@
 #ifndef notes_h
 #define notes_h
 
-#define noteC   45872
-#define noteDb  43303
-#define noteD   40872
-#define noteEb  38560
-#define noteE   36408
-#define noteF   34356
-#define noteGb  32439
-#define noteG   30612
-#define noteAb  28891
-#define noteA   27273
-#define noteBb  25738
-#define noteB   24295
+#define noteC   22935
+#define noteDb  21651
+#define noteD   20435
+#define noteEb  19280
+#define noteE   18203
+#define noteF   17178
+#define noteGb  16219
+#define noteG   15306
+#define noteAb  14445
+#define noteA   13636
+#define noteBb  12868
+#define noteB   12147
 
 #endif
