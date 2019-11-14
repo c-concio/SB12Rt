@@ -269,27 +269,18 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 		case 'a':
 		 //key="1";
 		 if(flat==0){   //if flat==0 (ie: regular root note)
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  		 PTP = 0x0B;
   		 PORTB=0x77;   //display just root note
 		 }
 		 if(flat==1){    // if flat==1 (ie: flat note)
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  		 PTP = 0x0B;
   		 PORTB=0x77;
   		 
   		 // delay
-  		 for(int i =0;i>10;i++){
+  		 for(int i =0;i>100000;i++){
   		 }
   		 
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 1;
-  		 PTP_PTP3 = 0;
+  		 PTP = 0x07;
   		 PORTB=0x7c;    //Display root note with a "b" prefix
 		 }
 		 break;
@@ -298,26 +289,17 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 		case 'b':
 		 //key="2";
 		 if (flat==0){
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  		 PTP = 0x0B;
   		 PORTB=0x7C;
 		 }
 		 if(flat==1){
-  	   PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  	   PTP = 0x0B;
   	   PORTB=0x7C;
   	   
-  	   for(int i =0;i>10;i++){
+  	   for(int i =0;i>100000;i++){
   		 }
   		 
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 1;
-  		 PTP_PTP3 = 0;
+  		 PTP = 0x07;
   	  
   	   PORTB=0x7c;
 		 }
@@ -325,10 +307,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 		 
 		 // ----- NOTE C -----  
 		case 'c':
-	   PTP_PTP0 = 1;
-		 PTP_PTP1 = 1;
-		 PTP_PTP2 = 0;
-		 PTP_PTP3 = 1;
+	   PTP = 0x0B;
 		 PORTB=0x39;
 		
 		 break;
@@ -337,26 +316,17 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 		case 'd':
 		 //key="A";
 		 if(flat==0){
-		   PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+		   PTP = 0x0B;
   		 PORTB=0x5E;
 		 }
 		 if (flat==1){
-  	   PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  	   PTP = 0x0B;
   	   PORTB=0x5E;
   	   
-  	   for(int i =0;i>10;i++){
+  	   for(int i =0;i>100000;i++){
   		 }
   		 
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 1;
-  		 PTP_PTP3 = 0;
+  		 PTP = 0x07;
   	   PORTB=0x7C;
 		 }
 		 break;
@@ -366,36 +336,24 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 		case 'e':
 		// key="7";
 		if(flat==0){		
-      PTP_PTP0 = 1;
-  	  PTP_PTP1 = 1;
-  	  PTP_PTP2 = 0;
-  	  PTP_PTP3 = 1;
+      PTP = 0x0B;
   	  PORTB=0x79;
 		}
 		if(flat==1){
-      PTP_PTP0 = 1;
-    	PTP_PTP1 = 1;
-    	PTP_PTP2 = 0;
-    	PTP_PTP3 = 1;
+      PTP = 0x0B;
       PORTB=0x79;
        
-      for(int i =0;i>10;i++){
+      for(int i =0;i>100000;i++){
     	}
     	 
-    	PTP_PTP0 = 1;
-    	PTP_PTP1 = 1;
-    	PTP_PTP2 = 1;
-    	PTP_PTP3 = 0;
+    	PTP = 0x07;
       PORTB=0x7C;
 		}
 		break;
 		
 		// ----- NOTE F -----  
 		case 'f':    
-		  PTP_PTP0 = 1;
-  	  PTP_PTP1 = 1;
-  	  PTP_PTP2 = 0;
-  	  PTP_PTP3 = 1;
+		  PTP = 0x0B;
   	  PORTB=0x71;
 		 break;
 		
@@ -403,26 +361,17 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
 		case 'g':
 		// key="9";
 		if(flat==0){
-	  	PTP_PTP0 = 1;
-  	  PTP_PTP1 = 1;
-  	  PTP_PTP2 = 0;
-  	  PTP_PTP3 = 1;
+	  	PTP = 0x0B;
   	  PORTB=0x3D;
 		}
 		if(flat==1){
-  		PTP_PTP0 = 1;
-    	PTP_PTP1 = 1;
-    	PTP_PTP2 = 0;
-    	PTP_PTP3 = 1;
+  		PTP = 0x0B;
       PORTB=0x3D;
        
-      for(int i =0;i>10;i++){
+      for(int i =0;i>100000;i++){
     	}
     	 
-    	PTP_PTP0 = 1;
-    	PTP_PTP1 = 1;
-    	PTP_PTP2 = 1;
-    	PTP_PTP3 = 0;
+      PTP = 0x07;
       PORTB=0x7C;
 		}
 		break;
