@@ -17,7 +17,7 @@ int period;
             
 //ISR for timer
 interrupt void oc0ISR(void){
-  // add the to TC0 the period
+  // add the to TC5 the period
   TC5 = TC5 + (period/2);
 }
 
@@ -123,7 +123,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   
   TSCR1 = 0x10; // clear all flags (TFFCA)
   TSCR2 = 0x06; // set prescaler to 64
-  TIOS_IOS5 = 1; // set channel 0 as output compare
+  TIOS_IOS5 = 1; // set channel 5 as output compare
   
   TCTL1 = 0x0C; // sets the pin PT0 to high
   TFLG1 = 0xFF; // clears all flags by setting to 1
