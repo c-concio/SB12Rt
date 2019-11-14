@@ -246,7 +246,8 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       }
       while(PORTA_BIT7){//c
         TSCR1_TEN = 1;
-        playSound('c', 0);
+        //playSound('c', 0);   //omit as not to replay this octave's C note
+        period = noteC/pow(2, octave + 1); //raise the second C by an octave 
         displayNote('c', 0);
       }          
         TSCR1_TEN = 0;
