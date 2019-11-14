@@ -80,7 +80,7 @@ const tIsrFunc _vect[] @0xFFCC = {
 
 
 void playSound(char,int);
-void displayNote(char,int);;
+void displayNote(char,int);
 
 int pow(int a, int b){
   if(b == 0)
@@ -105,10 +105,10 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   DDRA = 0x0F;  // Keypad
   DDRB = 0xFF;  // Cathodes of 7Seg
   DDRP = 0xFF;  // 7Seg
-  DDRH = 0x00;
+  DDRH = 0x00;  // Dip Switches
   
   
-  PORTA = 0x00;
+  PORTA = 0x00; //
   
   
   
@@ -146,53 +146,53 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     // ----- COLUMN 0 -----
     PORTA_BIT0 = 1;
     
-    if(PORTA != column0){
-      while(PORTA_BIT4){//a flat
-        TSCR1_TEN = 1; // enable the timer
-        playSound('a', 1);
-        displayNote('a', 1);
+    if(PORTA != column0){ 
+      while(PORTA_BIT4){
+        //Nothing
       }
-      while(PORTA_BIT5){//a       
-        TSCR1_TEN = 1;
-        playSound('a', 0);
-        displayNote('a', 0);
+      while(PORTA_BIT5){//c      
+        TSCR1_TEN = 1;    //enable the timer
+        playSound('c', 0);
+        displayNote('c', 0);
       }
-      while(PORTA_BIT6){//e flat   
+      while(PORTA_BIT6){//g flat   
         TSCR1_TEN = 1;
-        playSound('e', 1);
-        displayNote('e', 1);
+        playSound('g', 1);
+        displayNote('g', 1);
       }
-      while(PORTA_BIT7){//e      
+      while(PORTA_BIT7){//g      
         TSCR1_TEN = 1;
-        playSound('e', 0);
-        displayNote('e', 0);
+        playSound('g', 0);
+        displayNote('g', 0);
       }
       TSCR1_TEN = 0; // disable the timer
     }
     
-    PORTA_BIT0 = 0;
+    PORTA_BIT0 = 0; 
     
     // ----- COLUMN 1 ----- 
     PORTA_BIT1 = 1; 
     
     if(PORTA != column1){
-      while(PORTA_BIT4){//b flat
+      while(PORTA_BIT4){//d flat
         TSCR1_TEN = 1;
-        playSound('b', 1);
-        displayNote('b', 1);
+        playSound('d', 1);
+        displayNote('d', 1);
       }
-      while(PORTA_BIT5){//b   
+      while(PORTA_BIT5){//d   
         TSCR1_TEN = 1;
-        playSound('b', 0);
-        displayNote('b', 0);
+        playSound('d', 0);
+        displayNote('d', 0);
       }
-      while(PORTA_BIT6){
-        //Nothing
-      }
-      while(PORTA_BIT7){//f   
+      while(PORTA_BIT6){//a flat
         TSCR1_TEN = 1;
-        playSound('f', 0);
-        displayNote('f', 0);
+        playSound('a', 1);
+        displayNote('a', 1);
+      }
+      while(PORTA_BIT7){//a   
+        TSCR1_TEN = 1;
+        playSound('a', 0);
+        displayNote('a', 0);
       }            
         TSCR1_TEN = 0;
     } 
@@ -203,23 +203,25 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT2 = 1;
     
     if(PORTA != column2){
-     while(PORTA_BIT4){
-        //Nothing
-      }
-      while(PORTA_BIT5){//c   
+     while(PORTA_BIT4){//e flat
         TSCR1_TEN = 1;
-        playSound('c', 0);
-        displayNote('c', 0);
+        playSound('e', 1);
+        displayNote('e', 1);
       }
-      while(PORTA_BIT6){//g flat 
+      while(PORTA_BIT5){//e   
         TSCR1_TEN = 1;
-        playSound('g', 1);
-        displayNote('g', 1);
+        playSound('e', 0);
+        displayNote('e', 0);
       }
-      while(PORTA_BIT7){//g  
+      while(PORTA_BIT6){//b flat 
         TSCR1_TEN = 1;
-        playSound('g', 0);
-        displayNote('g', 0);
+        playSound('b', 1);
+        displayNote('b', 1);
+      }
+      while(PORTA_BIT7){//b  
+        TSCR1_TEN = 1;
+        playSound('b', 0);
+        displayNote('b', 0);
       }     
         TSCR1_TEN = 0;
     } 
@@ -231,21 +233,21 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     
     if(PORTA != column3){
      //asm(SWI);
-     while(PORTA_BIT4){//a flat  
-        TSCR1_TEN = 1;
-        playSound('d', 1);
-        displayNote('d', 1);
+     while(PORTA_BIT4){  
+        //Nothing
       }
-      while(PORTA_BIT5){//a     
+      while(PORTA_BIT5){//f     
         TSCR1_TEN = 1;
-        playSound('d', 0);
-        displayNote('d', 0);
+        playSound('f', 0);
+        displayNote('f', 0);
       }
       while(PORTA_BIT6){
         //Nothing
       }
-      while(PORTA_BIT7){
-        //Nothing
+      while(PORTA_BIT7){//c
+        TSCR1_TEN = 1;
+        playSound('c', 0);
+        displayNote('c', 0);
       }          
         TSCR1_TEN = 0;
     }
