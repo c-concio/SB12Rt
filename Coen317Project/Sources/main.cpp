@@ -152,17 +152,17 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       }
       while(PORTA_BIT5){//c      
         TSCR1_TEN = 1;    //enable the timer
-        playSound('c', 0);
+        period = noteC/pow(2, octave);
         displayNote('c', 0);
       }
       while(PORTA_BIT6){//g flat   
         TSCR1_TEN = 1;
-        playSound('g', 1);
+        period = noteGb/pow(2, octave);
         displayNote('g', 1);
       }
       while(PORTA_BIT7){//g      
         TSCR1_TEN = 1;
-        playSound('g', 0);
+        period = noteG/pow(2, octave);
         displayNote('g', 0);
       }
       TSCR1_TEN = 0; // disable the timer
@@ -176,22 +176,22 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     if(PORTA != column1){
       while(PORTA_BIT4){//d flat
         TSCR1_TEN = 1;
-        playSound('d', 1);
+        period = noteDb/pow(2, octave);
         displayNote('d', 1);
       }
       while(PORTA_BIT5){//d   
         TSCR1_TEN = 1;
-        playSound('d', 0);
+        period = noteD/pow(2, octave);
         displayNote('d', 0);
       }
       while(PORTA_BIT6){//a flat
         TSCR1_TEN = 1;
-        playSound('a', 1);
+        period = noteAb/pow(2, octave);
         displayNote('a', 1);
       }
       while(PORTA_BIT7){//a   
         TSCR1_TEN = 1;
-        playSound('a', 0);
+        period = noteA/pow(2, octave);
         displayNote('a', 0);
       }            
         TSCR1_TEN = 0;
@@ -205,22 +205,22 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     if(PORTA != column2){
      while(PORTA_BIT4){//e flat
         TSCR1_TEN = 1;
-        playSound('e', 1);
+        period = noteEb/pow(2, octave);
         displayNote('e', 1);
       }
       while(PORTA_BIT5){//e   
         TSCR1_TEN = 1;
-        playSound('e', 0);
+        period = noteE/pow(2, octave);
         displayNote('e', 0);
       }
       while(PORTA_BIT6){//b flat 
         TSCR1_TEN = 1;
-        playSound('b', 1);
+        period = noteBb/pow(2, octave);
         displayNote('b', 1);
       }
       while(PORTA_BIT7){//b  
         TSCR1_TEN = 1;
-        playSound('b', 0);
+        period = noteB/pow(2, octave);
         displayNote('b', 0);
       }     
         TSCR1_TEN = 0;
@@ -238,7 +238,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       }
       while(PORTA_BIT5){//f     
         TSCR1_TEN = 1;
-        playSound('f', 0);
+        period = noteF/pow(2, octave);
         displayNote('f', 0);
       }
       while(PORTA_BIT6){
@@ -246,7 +246,6 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       }
       while(PORTA_BIT7){//c
         TSCR1_TEN = 1;
-        //playSound('c', 0);   //omit as not to replay this octave's C note
         period = noteC/pow(2, octave + 1); //raise the second C by an octave 
         displayNote('c', 0);
       }          
@@ -256,55 +255,6 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT3 = 0;
   }      
     
-}
-
-// ------------------ playSound Function ------------------
-void playSound(char note, int flat){
-
-
-  switch(note){
-    case 'a':
-      if(flat == 1){
-        period = noteAb/pow(2, octave);
-      } else{
-        period = noteA/pow(2, octave);
-      }
-      break;
-    case 'b':
-      if(flat == 1){
-        period = noteBb/pow(2, octave);
-      } else{
-        period = noteB/pow(2, octave);
-      }
-      break;
-    case 'c':
-      period = noteC/pow(2, octave);
-      break;
-    case 'd':
-      if(flat == 1){
-        period = noteDb/pow(2, octave);
-      } else{
-        period = noteD/pow(2, octave);
-      }
-      break;
-    case 'e':
-      if(flat == 1){
-        period = noteEb/pow(2, octave);
-      } else{
-        period = noteE/pow(2, octave);
-      }
-      break;
-    case 'f':
-      period = noteF/pow(2, octave);
-      break;
-    case 'g':
-      if(flat == 1){
-        period = noteGb/pow(2, octave);
-      } else{
-        period = noteG/pow(2, octave);
-      }
-      break;
-  }  
 }
 
  //-------------------Display on 7-segment--------------------
