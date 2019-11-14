@@ -152,17 +152,17 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       }
       while(PORTA_BIT5){//c      
         TSCR1_TEN = 1;    //enable the timer
-        playSound('c', 0);
+        period = noteC/pow(2, octave);
         displayNote('c', 0);
       }
       while(PORTA_BIT6){//g flat   
         TSCR1_TEN = 1;
-        playSound('g', 1);
+        period = noteGb/pow(2, octave);
         displayNote('g', 1);
       }
       while(PORTA_BIT7){//g      
         TSCR1_TEN = 1;
-        playSound('g', 0);
+        period = noteG/pow(2, octave);
         displayNote('g', 0);
       }
       TSCR1_TEN = 0; // disable the timer
@@ -176,22 +176,22 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     if(PORTA != column1){
       while(PORTA_BIT4){//d flat
         TSCR1_TEN = 1;
-        playSound('d', 1);
+        period = noteDb/pow(2, octave);
         displayNote('d', 1);
       }
       while(PORTA_BIT5){//d   
         TSCR1_TEN = 1;
-        playSound('d', 0);
+        period = noteD/pow(2, octave);
         displayNote('d', 0);
       }
       while(PORTA_BIT6){//a flat
         TSCR1_TEN = 1;
-        playSound('a', 1);
+        period = noteAb/pow(2, octave);
         displayNote('a', 1);
       }
       while(PORTA_BIT7){//a   
         TSCR1_TEN = 1;
-        playSound('a', 0);
+        period = noteA/pow(2, octave);
         displayNote('a', 0);
       }            
         TSCR1_TEN = 0;
@@ -205,22 +205,22 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     if(PORTA != column2){
      while(PORTA_BIT4){//e flat
         TSCR1_TEN = 1;
-        playSound('e', 1);
+        period = noteEb/pow(2, octave);
         displayNote('e', 1);
       }
       while(PORTA_BIT5){//e   
         TSCR1_TEN = 1;
-        playSound('e', 0);
+        period = noteE/pow(2, octave);
         displayNote('e', 0);
       }
       while(PORTA_BIT6){//b flat 
         TSCR1_TEN = 1;
-        playSound('b', 1);
+        period = noteBb/pow(2, octave);
         displayNote('b', 1);
       }
       while(PORTA_BIT7){//b  
         TSCR1_TEN = 1;
-        playSound('b', 0);
+        period = noteB/pow(2, octave);
         displayNote('b', 0);
       }     
         TSCR1_TEN = 0;
@@ -238,7 +238,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       }
       while(PORTA_BIT5){//f     
         TSCR1_TEN = 1;
-        playSound('f', 0);
+        period = noteF/pow(2, octave);
         displayNote('f', 0);
       }
       while(PORTA_BIT6){
@@ -246,7 +246,6 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       }
       while(PORTA_BIT7){//c
         TSCR1_TEN = 1;
-        //playSound('c', 0);   //omit as not to replay this octave's C note
         period = noteC/pow(2, octave + 1); //raise the second C by an octave 
         displayNote('c', 0);
       }          
@@ -256,55 +255,6 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
     PORTA_BIT3 = 0;
   }      
     
-}
-
-// ------------------ playSound Function ------------------
-void playSound(char note, int flat){
-
-
-  switch(note){
-    case 'a':
-      if(flat == 1){
-        period = noteAb/pow(2, octave);
-      } else{
-        period = noteA/pow(2, octave);
-      }
-      break;
-    case 'b':
-      if(flat == 1){
-        period = noteBb/pow(2, octave);
-      } else{
-        period = noteB/pow(2, octave);
-      }
-      break;
-    case 'c':
-      period = noteC/pow(2, octave);
-      break;
-    case 'd':
-      if(flat == 1){
-        period = noteDb/pow(2, octave);
-      } else{
-        period = noteD/pow(2, octave);
-      }
-      break;
-    case 'e':
-      if(flat == 1){
-        period = noteEb/pow(2, octave);
-      } else{
-        period = noteE/pow(2, octave);
-      }
-      break;
-    case 'f':
-      period = noteF/pow(2, octave);
-      break;
-    case 'g':
-      if(flat == 1){
-        period = noteGb/pow(2, octave);
-      } else{
-        period = noteG/pow(2, octave);
-      }
-      break;
-  }  
 }
 
  //-------------------Display on 7-segment--------------------
@@ -319,27 +269,18 @@ void playSound(char note, int flat){
 		case 'a':
 		 //key="1";
 		 if(flat==0){   //if flat==0 (ie: regular root note)
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  		 PTP = 0x0B;
   		 PORTB=0x77;   //display just root note
 		 }
 		 if(flat==1){    // if flat==1 (ie: flat note)
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  		 PTP = 0x0B;
   		 PORTB=0x77;
   		 
   		 // delay
-  		 for(int i =0;i>10;i++){
+  		 for(int i =0;i>100000;i++){
   		 }
   		 
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 1;
-  		 PTP_PTP3 = 0;
+  		 PTP = 0x07;
   		 PORTB=0x7c;    //Display root note with a "b" prefix
 		 }
 		 break;
@@ -348,26 +289,17 @@ void playSound(char note, int flat){
 		case 'b':
 		 //key="2";
 		 if (flat==0){
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  		 PTP = 0x0B;
   		 PORTB=0x7C;
 		 }
 		 if(flat==1){
-  	   PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  	   PTP = 0x0B;
   	   PORTB=0x7C;
   	   
-  	   for(int i =0;i>10;i++){
+  	   for(int i =0;i>100000;i++){
   		 }
   		 
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 1;
-  		 PTP_PTP3 = 0;
+  		 PTP = 0x07;
   	  
   	   PORTB=0x7c;
 		 }
@@ -375,10 +307,7 @@ void playSound(char note, int flat){
 		 
 		 // ----- NOTE C -----  
 		case 'c':
-	   PTP_PTP0 = 1;
-		 PTP_PTP1 = 1;
-		 PTP_PTP2 = 0;
-		 PTP_PTP3 = 1;
+	   PTP = 0x0B;
 		 PORTB=0x39;
 		
 		 break;
@@ -387,26 +316,17 @@ void playSound(char note, int flat){
 		case 'd':
 		 //key="A";
 		 if(flat==0){
-		   PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+		   PTP = 0x0B;
   		 PORTB=0x5E;
 		 }
 		 if (flat==1){
-  	   PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 0;
-  		 PTP_PTP3 = 1;
+  	   PTP = 0x0B;
   	   PORTB=0x5E;
   	   
-  	   for(int i =0;i>10;i++){
+  	   for(int i =0;i>100000;i++){
   		 }
   		 
-  		 PTP_PTP0 = 1;
-  		 PTP_PTP1 = 1;
-  		 PTP_PTP2 = 1;
-  		 PTP_PTP3 = 0;
+  		 PTP = 0x07;
   	   PORTB=0x7C;
 		 }
 		 break;
@@ -416,36 +336,24 @@ void playSound(char note, int flat){
 		case 'e':
 		// key="7";
 		if(flat==0){		
-      PTP_PTP0 = 1;
-  	  PTP_PTP1 = 1;
-  	  PTP_PTP2 = 0;
-  	  PTP_PTP3 = 1;
+      PTP = 0x0B;
   	  PORTB=0x79;
 		}
 		if(flat==1){
-      PTP_PTP0 = 1;
-    	PTP_PTP1 = 1;
-    	PTP_PTP2 = 0;
-    	PTP_PTP3 = 1;
+      PTP = 0x0B;
       PORTB=0x79;
        
-      for(int i =0;i>10;i++){
+      for(int i =0;i>100000;i++){
     	}
     	 
-    	PTP_PTP0 = 1;
-    	PTP_PTP1 = 1;
-    	PTP_PTP2 = 1;
-    	PTP_PTP3 = 0;
+    	PTP = 0x07;
       PORTB=0x7C;
 		}
 		break;
 		
 		// ----- NOTE F -----  
 		case 'f':    
-		  PTP_PTP0 = 1;
-  	  PTP_PTP1 = 1;
-  	  PTP_PTP2 = 0;
-  	  PTP_PTP3 = 1;
+		  PTP = 0x0B;
   	  PORTB=0x71;
 		 break;
 		
@@ -453,26 +361,17 @@ void playSound(char note, int flat){
 		case 'g':
 		// key="9";
 		if(flat==0){
-	  	PTP_PTP0 = 1;
-  	  PTP_PTP1 = 1;
-  	  PTP_PTP2 = 0;
-  	  PTP_PTP3 = 1;
+	  	PTP = 0x0B;
   	  PORTB=0x3D;
 		}
 		if(flat==1){
-  		PTP_PTP0 = 1;
-    	PTP_PTP1 = 1;
-    	PTP_PTP2 = 0;
-    	PTP_PTP3 = 1;
+  		PTP = 0x0B;
       PORTB=0x3D;
        
-      for(int i =0;i>10;i++){
+      for(int i =0;i>100000;i++){
     	}
     	 
-    	PTP_PTP0 = 1;
-    	PTP_PTP1 = 1;
-    	PTP_PTP2 = 1;
-    	PTP_PTP3 = 0;
+      PTP = 0x07;
       PORTB=0x7C;
 		}
 		break;
