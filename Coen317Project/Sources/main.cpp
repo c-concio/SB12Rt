@@ -1,6 +1,8 @@
+                         
+#include "delay.h"
 #include <hidef.h>      /* common defines and macros: file found in CodeWarrior folder */
 #include "derivative.h"      /* derivative-specific definitions (e.g.: PORTA, DDDRK) */
-//#include <string>
+#include <stdlib.h>
 #include "notes.h"
 
 #define column0 0x01
@@ -91,7 +93,9 @@ int pow(int a, int b){
   }
   return val;
 }
-                                           
+                  
+
+//void delay();
 
 void main(void) { // in Assembly code, this is treated as a SubRoutine
 
@@ -277,8 +281,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   		 PORTB=0x77;
   		 
   		 // delay
-  		 for(int i =0;i>100000;i++){
-  		 }
+  		 ASMdelay();
   		 
   		 PTP = 0x07;
   		 PORTB=0x7c;    //Display root note with a "b" prefix
@@ -296,8 +299,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   	   PTP = 0x0B;
   	   PORTB=0x7C;
   	   
-  	   for(int i =0;i>100000;i++){
-  		 }
+  	   ASMdelay();
   		 
   		 PTP = 0x07;
   	  
@@ -323,8 +325,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   	   PTP = 0x0B;
   	   PORTB=0x5E;
   	   
-  	   for(int i =0;i>100000;i++){
-  		 }
+  	   ASMdelay();
   		 
   		 PTP = 0x07;
   	   PORTB=0x7C;
@@ -343,9 +344,8 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
       PTP = 0x0B;
       PORTB=0x79;
        
-      for(int i =0;i>100000;i++){
-    	}
-    	 
+      ASMdelay();
+      
     	PTP = 0x07;
       PORTB=0x7C;
 		}
@@ -368,8 +368,7 @@ void main(void) { // in Assembly code, this is treated as a SubRoutine
   		PTP = 0x0B;
       PORTB=0x3D;
        
-      for(int i =0;i>100000;i++){
-    	}
+      ASMdelay();
     	 
       PTP = 0x07;
       PORTB=0x7C;
